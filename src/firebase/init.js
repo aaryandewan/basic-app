@@ -10,5 +10,3 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
-("aaryan don");
