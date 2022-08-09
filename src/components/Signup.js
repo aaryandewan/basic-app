@@ -13,8 +13,13 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import Stack from "@mui/material/Stack";
+// import Button from '@mui/material/Button';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 //firebase info
-// import { auth } from "../firebase/init";
+import { auth } from "../firebase/init";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 function Copyright(props) {
@@ -38,6 +43,24 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -57,6 +80,9 @@ export default function SignUp() {
         const user = userCredential.user;
         console.log("----------------------------------------------------");
         console.log(user);
+
+        setOpen(true);
+
         // ...
       })
       .catch((error) => {
@@ -68,6 +94,11 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Account successfully created!
+        </Alert>
+      </Snackbar>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
