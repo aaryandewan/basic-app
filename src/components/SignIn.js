@@ -13,6 +13,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import Stack from "@mui/material/Stack";
+// import Button from '@mui/material/Button';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+//firebase
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 function Copyright(props) {
   return (
     <Typography
@@ -34,6 +42,20 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -41,10 +63,30 @@ export default function SignInSide() {
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, data.get("email"), data.get("password"))
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("Signed IN!");
+        console.log(user);
+        setOpen(true);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Logged in successfully!
+        </Alert>
+      </Snackbar>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
