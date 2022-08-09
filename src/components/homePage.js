@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const auth = getAuth();
@@ -23,9 +24,25 @@ function HomePage() {
     } else {
       // User is signed out
       // ...
+      setUser(null);
       console.log("Homepage, user is signed out.");
     }
   });
+
+  const handleSignOut = () => {
+    console.log("Before signing out:");
+    console.log(auth.currentUser);
+    console.log("--------------------------------");
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("Signed out");
+        console.log(auth.currentUser);
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   return (
     <div>
@@ -44,8 +61,9 @@ function HomePage() {
               size="large"
               type="submit"
               variant="contained"
+              onClick={handleSignOut}
             >
-              Sign Out
+              Sign out
             </Button>
           </Grid>
         )}
@@ -63,26 +81,30 @@ function HomePage() {
         )}
         {!user && (
           <Grid item>
-            <Button
-              color="primary"
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Sign up
-            </Button>
+            <Link to="/signup" style={{ textDecoration: "none" }}>
+              <Button
+                color="primary"
+                size="large"
+                type="submit"
+                variant="contained"
+              >
+                Sign Up
+              </Button>
+            </Link>
           </Grid>
         )}
         {!user && (
           <Grid item>
-            <Button
-              color="primary"
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Sign in
-            </Button>
+            <Link to="/signin" style={{ textDecoration: "none" }}>
+              <Button
+                color="primary"
+                size="large"
+                type="submit"
+                variant="contained"
+              >
+                Sign in
+              </Button>
+            </Link>
           </Grid>
         )}
       </Grid>
