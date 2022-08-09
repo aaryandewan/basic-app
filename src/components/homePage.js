@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 function HomePage() {
   const auth = getAuth();
@@ -27,8 +29,63 @@ function HomePage() {
 
   return (
     <div>
-      Homepage
-      <h1>{user && user.uid}</h1>
+      <Grid
+        style={{ backgroundColor: "white", height: "100vh" }}
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={3}
+      >
+        {user && (
+          <Grid item>
+            <Button
+              color="primary"
+              size="large"
+              type="submit"
+              variant="contained"
+            >
+              Sign Out
+            </Button>
+          </Grid>
+        )}
+        {user && (
+          <Grid item>
+            <Button
+              color="primary"
+              size="large"
+              type="submit"
+              variant="contained"
+            >
+              Profile
+            </Button>
+          </Grid>
+        )}
+        {!user && (
+          <Grid item>
+            <Button
+              color="primary"
+              size="large"
+              type="submit"
+              variant="contained"
+            >
+              Sign up
+            </Button>
+          </Grid>
+        )}
+        {!user && (
+          <Grid item>
+            <Button
+              color="primary"
+              size="large"
+              type="submit"
+              variant="contained"
+            >
+              Sign in
+            </Button>
+          </Grid>
+        )}
+      </Grid>
     </div>
   );
 }
