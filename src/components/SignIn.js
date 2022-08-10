@@ -23,6 +23,9 @@ import MuiAlert from "@mui/material/Alert";
 //firebase
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
+// import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 function Copyright(props) {
   return (
     <Typography
@@ -44,7 +47,9 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+  // const history = useHistory();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -74,6 +79,8 @@ export default function SignInSide() {
         console.log("Signed IN!");
         console.log(user);
         setOpen(true);
+        navigate("/");
+
         // ...
       })
       .catch((error) => {

@@ -23,6 +23,8 @@ import MuiAlert from "@mui/material/Alert";
 import { auth } from "../firebase/init";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
+import { useNavigate } from "react-router-dom";
+
 function Copyright(props) {
   return (
     <Typography
@@ -44,6 +46,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
   const handleClose = (event, reason) => {
@@ -79,6 +82,7 @@ export default function SignUp() {
         console.log(user);
 
         setOpen(true);
+        navigate("/signin");
 
         // ...
       })
