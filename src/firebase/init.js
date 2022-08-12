@@ -1,9 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAmof-PHzuI_CVF8xivLEsdCilX5WLcCWk",
   authDomain: "stproject-cd675.firebaseapp.com",
+  databaseURL: "https://stproject-cd675-default-rtdb.firebaseio.com",
   projectId: "stproject-cd675",
   storageBucket: "stproject-cd675.appspot.com",
   messagingSenderId: "163010623462",
@@ -12,5 +14,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
-export { app, auth };
+export { app, auth, storage };
