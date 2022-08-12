@@ -69,14 +69,16 @@ function HomePage() {
         )}
         {user && (
           <Grid item>
-            <Button
-              color="primary"
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Profile
-            </Button>
+            <Link to="/profile" style={{ textDecoration: "none" }}>
+              <Button
+                color="primary"
+                size="large"
+                type="submit"
+                variant="contained"
+              >
+                Profile
+              </Button>
+            </Link>
           </Grid>
         )}
         {!user && (
