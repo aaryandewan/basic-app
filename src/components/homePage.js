@@ -3,20 +3,38 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 function HomePage() {
+  const [imageURL, setImageURL] = useState(null);
+
   const auth = getAuth();
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
+
+  const getTheProfileURL = (user) => {
+    const storage = getStorage();
+
+    let fRef = "images/".concat(user.uid);
+    fRef.concat("/.jpg");
+    getDownloadURL(ref(storage, fRef))
+      .then((url) => {
+        console.log("URL GOT!", url);
+        setImageURL(url);
+      })
+      .catch((error) => {
+        console.log("ERRRRR", error);
+      });
+  };
 
   useEffect(() => {
-    setUser(auth.currentUser);
-  }, [auth.currentUser]);
+    if (user) {
+      console.log("USER, ", user);
+      getTheProfileURL(user);
+    }
+  }, [user]);
 
-  // const user = auth.currentUser;
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
       const uid = user.uid;
       setUser(user);
       console.log("Homepage, User is signed in and uid = ", uid);
@@ -24,7 +42,7 @@ function HomePage() {
     } else {
       // User is signed out
       // ...
-      setUser(null);
+      if (user != null) setUser(null);
       console.log("Homepage, user is signed out.");
     }
   });
@@ -38,6 +56,8 @@ function HomePage() {
         // Sign-out successful.
         console.log("Signed out");
         console.log(auth.currentUser);
+        setUser(null);
+        setImageURL(null);
       })
       .catch((error) => {
         // An error happened.
@@ -67,6 +87,11 @@ function HomePage() {
             </Button>
           </Grid>
         )}
+
+        {imageURL && (
+          <img src={imageURL} height="600px" width="400px" alt="profile"></img>
+        )}
+
         {user && (
           <Grid item>
             <Link to="/profile" style={{ textDecoration: "none" }}>
